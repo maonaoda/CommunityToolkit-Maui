@@ -88,7 +88,8 @@ public partial class TouchBehavior
 		hoverGesture = null;
 	}
 
-	sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
+#pragma warning disable CS1591 // Disable warning: "Missing XML comment for publicly visible type or member"
+	public class TouchUITapGestureRecognizer : UIGestureRecognizer
 	{
 		readonly TouchBehavior behavior;
 
@@ -212,6 +213,12 @@ public partial class TouchBehavior
 			}
 		}
 
+		public void CancelTouch()
+		{
+			HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed);
+			isCanceled = true;
+		}
+
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing)
@@ -252,4 +259,5 @@ public partial class TouchBehavior
 			}
 		}
 	}
+#pragma warning restore CS1591
 }
