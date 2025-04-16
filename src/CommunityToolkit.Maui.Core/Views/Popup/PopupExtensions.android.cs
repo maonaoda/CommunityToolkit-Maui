@@ -240,12 +240,12 @@ public static class PopupExtensions
 			if (popup.Size.Width != LayoutParams.WrapContent && popup.Size.Width != LayoutParams.MatchParent)
 			{
 				width = (int)context.ToPixels(popup.Size.Width);
-				width = width > windowSize.Width ? (int)windowSize.Width : width;
+				width = windowSize.Width > 0 && width > windowSize.Width ? (int)windowSize.Width : width;
 			}
 			if (popup.Size.Height != LayoutParams.WrapContent && popup.Size.Height != LayoutParams.MatchParent)
 			{
 				height = (int)context.ToPixels(popup.Size.Height);
-				height = height > windowSize.Height ? (int)windowSize.Height : height;
+				height = windowSize.Height > 0 && height > windowSize.Height ? (int)windowSize.Height : height;
 			}
 
 			if (handler.LastPopupWidth == width
