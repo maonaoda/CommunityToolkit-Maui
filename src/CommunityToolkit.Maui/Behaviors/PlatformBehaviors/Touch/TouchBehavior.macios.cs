@@ -88,7 +88,10 @@ public partial class TouchBehavior
 		hoverGesture = null;
 	}
 
-	sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
+	/// <summary>
+	/// iOS/tvOS implementation of the Touch Gesture Recognizer.
+	/// </summary>
+	public class TouchUITapGestureRecognizer : UIGestureRecognizer
 	{
 		readonly TouchBehavior behavior;
 
@@ -96,6 +99,10 @@ public partial class TouchBehavior
 
 		bool isCanceled;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TouchUITapGestureRecognizer"/> class.
+		/// </summary>
+		/// <param name="behavior"></param>
 		public TouchUITapGestureRecognizer(TouchBehavior behavior)
 		{
 			this.behavior = behavior;
@@ -103,6 +110,11 @@ public partial class TouchBehavior
 			Delegate = new TouchUITapGestureRecognizerDelegate();
 		}
 
+		/// <summary>
+		/// Touches Began event handler.
+		/// </summary>
+		/// <param name="touches"></param>
+		/// <param name="evt"></param>
 		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
 			base.TouchesBegan(touches, evt);
@@ -118,6 +130,11 @@ public partial class TouchBehavior
 			HandleTouch(TouchStatus.Started, TouchInteractionStatus.Started);
 		}
 
+		/// <summary>
+		/// Touches Ended event handler.
+		/// </summary>
+		/// <param name="touches"></param>
+		/// <param name="evt"></param>
 		public override void TouchesEnded(NSSet touches, UIEvent evt)
 		{
 			base.TouchesEnded(touches, evt);
@@ -133,6 +150,11 @@ public partial class TouchBehavior
 			isCanceled = true;
 		}
 
+		/// <summary>
+		/// Touches Cancelled event handler.
+		/// </summary>
+		/// <param name="touches"></param>
+		/// <param name="evt"></param>
 		public override void TouchesCancelled(NSSet touches, UIEvent evt)
 		{
 			base.TouchesCancelled(touches, evt);
@@ -147,6 +169,11 @@ public partial class TouchBehavior
 			isCanceled = true;
 		}
 
+		/// <summary>
+		/// Touches Moved event handler.
+		/// </summary>
+		/// <param name="touches"></param>
+		/// <param name="evt"></param>
 		public override void TouchesMoved(NSSet touches, UIEvent evt)
 		{
 			base.TouchesMoved(touches, evt);
@@ -186,6 +213,10 @@ public partial class TouchBehavior
 			}
 		}
 
+		/// <summary>
+		/// Disposes the gesture recognizer.
+		/// </summary>
+		/// <param name="disposing"></param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing)
@@ -222,8 +253,17 @@ public partial class TouchBehavior
 			return (touches?.AnyObject as UITouch)?.LocationInView(View);
 		}
 
-		sealed class TouchUITapGestureRecognizerDelegate : UIGestureRecognizerDelegate
+		/// <summary>
+		/// iOS/tvOS implementation of the Touch Gesture Recognizer Delegate.
+		/// </summary>
+		public class TouchUITapGestureRecognizerDelegate : UIGestureRecognizerDelegate
 		{
+			/// <summary>
+			/// Determines whether multiple gesture recognizers should be allowed to recognize gestures simultaneously.
+			/// </summary>
+			/// <param name="gestureRecognizer"></param>
+			/// <param name="otherGestureRecognizer"></param>
+			/// <returns></returns>
 			public override bool ShouldRecognizeSimultaneously(UIGestureRecognizer gestureRecognizer, UIGestureRecognizer otherGestureRecognizer)
 			{
 				if (gestureRecognizer is TouchUITapGestureRecognizer touchGesture && otherGestureRecognizer is UIPanGestureRecognizer &&
@@ -236,6 +276,12 @@ public partial class TouchBehavior
 				return true;
 			}
 
+			/// <summary>
+			/// Determines whether the gesture recognizer should receive the touch.
+			/// </summary>
+			/// <param name="recognizer"></param>
+			/// <param name="touch"></param>
+			/// <returns></returns>
 			public override bool ShouldReceiveTouch(UIGestureRecognizer recognizer, UITouch touch)
 			{
 				if (recognizer.View.IsDescendantOfView(touch.View))
