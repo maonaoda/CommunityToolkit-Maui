@@ -86,11 +86,37 @@ public interface IPopupService
 	/// </summary>
 	/// <typeparam name="T">Supports both Popup Type or Popup ViewModel Type</typeparam>
 	/// <typeparam name="TResult">Popup Result Type</typeparam>
+	/// <param name="page">The current visible page</param>
+	/// <param name="options">The <see cref="IPopupOptions"/> that enable support for customizing the display and behavior of the presented popup.</param>
+	/// <param name="shellParameters">Parameters that will be passed into the view or its associated BindingContext if they implement <see cref="IQueryAttributable"/>.</param>
+	/// <param name="cancellationToken">A <see cref="CancellationToken"/> providing support for canceling the wait for a result to be returned. This will <b>not</b> close the popup.</param>
+	/// <returns>An <see cref="IPopupResult{TResult}"/> when the popup is closed or the <paramref name="cancellationToken"/> is cancelled. Make sure to check the <see cref="IPopupResult.WasDismissedByTappingOutsideOfPopup"/> value to determine how the popup was closed.</returns>
+	Task<IPopupResult<TResult>> ShowPopupAsync<T, TResult>(Page page, IPopupOptions? options = null, IDictionary<string, object>? shellParameters = null, CancellationToken cancellationToken = default)
+		where T : notnull;
+
+	/// <summary>
+	/// Shows a popup with the specified options.
+	/// </summary>
+	/// <typeparam name="T">Supports both Popup Type or Popup ViewModel Type</typeparam>
+	/// <typeparam name="TResult">Popup Result Type</typeparam>
 	/// <param name="navigation">The active <see cref="INavigation"/>, a property commonly found in <see cref="Microsoft.Maui.Controls.VisualElement"/></param>
 	/// <param name="options">The <see cref="IPopupOptions"/> that enable support for customizing the display and behavior of the presented popup.</param>
 	/// <param name="cancellationToken">A <see cref="CancellationToken"/> providing support for canceling the wait for a result to be returned. This will <b>not</b> close the popup.</param>
 	/// <returns>An <see cref="IPopupResult{TResult}"/> when the popup is closed or the <paramref name="cancellationToken"/> is cancelled. Make sure to check the <see cref="IPopupResult.WasDismissedByTappingOutsideOfPopup"/> value to determine how the popup was closed.</returns>
 	Task<IPopupResult<TResult>> ShowPopupAsync<T, TResult>(INavigation navigation, IPopupOptions? options = null, CancellationToken cancellationToken = default)
+		where T : notnull;
+
+	/// <summary>
+	/// Shows a popup with the specified options.
+	/// </summary>
+	/// <typeparam name="T">Supports both Popup Type or Popup ViewModel Type</typeparam>
+	/// <typeparam name="TResult">Popup Result Type</typeparam>
+	/// <param name="navigation">The active <see cref="INavigation"/>, a property commonly found in <see cref="Microsoft.Maui.Controls.VisualElement"/></param>
+	/// <param name="shellParameters">Parameters that will be passed into the view or its associated BindingContext if they implement <see cref="IQueryAttributable"/>.</param>
+	/// <param name="options">The <see cref="IPopupOptions"/> that enable support for customizing the display and behavior of the presented popup.</param>
+	/// <param name="cancellationToken">A <see cref="CancellationToken"/> providing support for canceling the wait for a result to be returned. This will <b>not</b> close the popup.</param>
+	/// <returns>An <see cref="IPopupResult{TResult}"/> when the popup is closed or the <paramref name="cancellationToken"/> is cancelled. Make sure to check the <see cref="IPopupResult.WasDismissedByTappingOutsideOfPopup"/> value to determine how the popup was closed.</returns>
+	Task<IPopupResult<TResult>> ShowPopupAsync<T, TResult>(INavigation navigation, IPopupOptions? options = null, IDictionary<string, object>? shellParameters = null, CancellationToken cancellationToken = default)
 		where T : notnull;
 
 	/// <summary>

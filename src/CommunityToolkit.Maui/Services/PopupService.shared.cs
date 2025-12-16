@@ -103,6 +103,14 @@ public class PopupService : IPopupService
 	}
 
 	/// <inheritdoc />
+	public Task<IPopupResult<TResult>> ShowPopupAsync<T, TResult>(Page page, IPopupOptions? options = null, IDictionary<string, object>? shellParameters = null, CancellationToken cancellationToken = default) where T : notnull
+	{
+		ArgumentNullException.ThrowIfNull(page);
+
+		return ShowPopupAsync<T, TResult>(page.Navigation, options, shellParameters, cancellationToken);
+	}
+
+	/// <inheritdoc />
 	public Task<IPopupResult<TResult>> ShowPopupAsync<T, TResult>(INavigation navigation,
 		IPopupOptions? options = null,
 		CancellationToken token = default)
@@ -112,6 +120,25 @@ public class PopupService : IPopupService
 
 		token.ThrowIfCancellationRequested();
 		var popupContent = GetPopupContent(serviceProvider.GetRequiredService<T>());
+
+		return navigation.ShowPopupAsync<TResult>(popupContent, options, token);
+	}
+
+	/// <inheritdoc />
+	public Task<IPopupResult<TResult>> ShowPopupAsync<T, TResult>(INavigation navigation,
+		IPopupOptions? options = null,
+		IDictionary<string, object>? shellParameters = null,
+		CancellationToken token = default)
+		where T : notnull
+	{
+		ArgumentNullException.ThrowIfNull(navigation);
+
+		token.ThrowIfCancellationRequested();
+		var popupContent = GetPopupContent(serviceProvider.GetRequiredService<T>());
+		if(popupContent.BindingContext is IQueryAttributable queryAttributable && shellParameters is not null)
+		{
+			queryAttributable.ApplyQueryAttributes(shellParameters);
+		}
 
 		return navigation.ShowPopupAsync<TResult>(popupContent, options, token);
 	}

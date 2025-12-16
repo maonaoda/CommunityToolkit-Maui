@@ -10,29 +10,59 @@ using Page = Microsoft.Maui.Controls.Page;
 
 namespace CommunityToolkit.Maui.Views;
 
-sealed partial class PopupPage<T>(Popup<T> popup, IPopupOptions? popupOptions)
+/// <summary>
+/// PopupPage of type T
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="popup"></param>
+/// <param name="popupOptions"></param>
+public partial class PopupPage<T>(Popup<T> popup, IPopupOptions? popupOptions)
 	: PopupPage(popup, popupOptions)
-{
+{	
+	/// <summary>
+	/// Initialize <see cref="PopupPage{T}"/>.
+	/// </summary>
+	/// <param name="view"></param>
+	/// <param name="popupOptions"></param>
 	public PopupPage(View view, IPopupOptions? popupOptions)
 		: this(view as Popup<T> ?? CreatePopupFromView<Popup<T>>(view), popupOptions)
 	{
 	}
 
+	/// <summary>
+	/// Closes the PopupPage with the specified result
+	/// </summary>
+	/// <param name="result"></param>
+	/// <param name="token"></param>
+	/// <returns></returns>
 	public Task CloseAsync(PopupResult<T> result, CancellationToken token = default) => base.CloseAsync(result, token);
 }
 
-partial class PopupPage : ContentPage, IQueryAttributable
+/// <summary>
+/// PopupPage
+/// </summary>
+public partial class PopupPage : ContentPage, IQueryAttributable
 {
 	readonly Popup popup;
 	readonly IPopupOptions popupOptions;
 	readonly Command tapOutsideOfPopupCommand;
 
+	/// <summary>
+	/// Initialize <see cref="PopupPage"/>.
+	/// </summary>
+	/// <param name="view"></param>
+	/// <param name="popupOptions"></param>
 	public PopupPage(View view, IPopupOptions? popupOptions)
 		: this(view as Popup ?? CreatePopupFromView<Popup>(view), popupOptions)
 	{
 		ArgumentNullException.ThrowIfNull(view);
 	}
 
+	/// <summary>
+	/// Initialize <see cref="PopupPage"/>.
+	/// </summary>
+	/// <param name="popup"></param>
+	/// <param name="popupOptions"></param>
 	public PopupPage(Popup popup, IPopupOptions? popupOptions)
 	{
 		ArgumentNullException.ThrowIfNull(popup);
@@ -69,12 +99,23 @@ partial class PopupPage : ContentPage, IQueryAttributable
 		NavigationPage.SetHasNavigationBar(this, false);
 	}
 
+	/// <summary>
+	/// Event fired when the Popup is closed
+	/// </summary>
 	public event EventHandler<IPopupResult>? PopupClosed;
 
 	// Prevent Content from being set by external class
 	// Casts `PopupPage.Content` to return typeof(PopupPageLayout)
 	internal new PopupPageLayout Content => (PopupPageLayout)base.Content;
 
+	/// <summary>
+	/// Closes the PopupPage with the specified result
+	/// </summary>
+	/// <param name="result"></param>
+	/// <param name="token"></param>
+	/// <returns></returns>
+	/// <exception cref="PopupNotFoundException"></exception>
+	/// <exception cref="PopupBlockedException"></exception>
 	public async Task CloseAsync(PopupResult result, CancellationToken token = default)
 	{
 		// We first call `.ThrowIfCancellationRequested()` to ensure we don't throw one of the `InvalidOperationException`s (below) if the `CancellationToken` has already been canceled.
@@ -117,6 +158,10 @@ partial class PopupPage : ContentPage, IQueryAttributable
 		PopupClosed?.Invoke(this, result);
 	}
 
+	/// <summary>
+	/// Handles the Android Back Button Pressed event
+	/// </summary>
+	/// <returns></returns>
 	protected override bool OnBackButtonPressed()
 	{
 		TryExecuteTapOutsideOfPopupCommand();
@@ -124,7 +169,11 @@ partial class PopupPage : ContentPage, IQueryAttributable
 		// Always return true to let the Android Operating System know that we are manually handling the Navigation request from the Android Back Button
 		return true;
 	}
-
+	
+	/// <summary>
+	/// Notifies the Popup that it has been closed
+	/// </summary>
+	/// <param name="args"></param>
 	protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
 	{
 		popup.NotifyPopupIsClosed();
@@ -133,12 +182,22 @@ partial class PopupPage : ContentPage, IQueryAttributable
 		base.OnNavigatedFrom(args);
 	}
 
+	/// <summary>
+	/// Notifies the Popup that it has been opened
+	/// </summary>
+	/// <param name="args"></param>
 	protected override void OnNavigatedTo(NavigatedToEventArgs args)
 	{
 		base.OnNavigatedTo(args);
 		popup.NotifyPopupIsOpened();
 	}
 
+	/// <summary>
+	/// Creates a Popup of type T from a View
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="view"></param>
+	/// <returns></returns>
 	protected static T CreatePopupFromView<T>(in View view) where T : Popup, new()
 	{
 		ArgumentNullException.ThrowIfNull(view);
