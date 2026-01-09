@@ -170,6 +170,20 @@ public partial class TouchBehavior
 		}
 
 		/// <summary>
+		/// Cancels the touch interaction.
+		/// </summary>
+		public void CancelTouch()
+		{
+			if (!behavior.IsEnabled)
+			{
+				return;
+			}
+
+			HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed);
+			isCanceled = true;
+		}
+
+		/// <summary>
 		/// Touches Moved event handler.
 		/// </summary>
 		/// <param name="touches"></param>
