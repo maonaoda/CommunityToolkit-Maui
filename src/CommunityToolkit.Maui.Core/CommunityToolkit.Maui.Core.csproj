@@ -38,8 +38,8 @@
     <Description>Core library for community toolkits using .NET MAUI</Description>
     <PackageIcon>icon.png</PackageIcon>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>13.0.0.1</Version>
-    <PackageVersion>13.0.0.1</PackageVersion>
+    <Version>13.0.0.2</Version>
+    <PackageVersion>13.0.0.2</PackageVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>dotnet,maui,toolkit,kit,communitytoolkit,dotnetcommunitytoolkit</PackageTags>
     <Configurations>Debug;Release</Configurations>
