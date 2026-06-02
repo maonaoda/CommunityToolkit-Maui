@@ -134,7 +134,7 @@ public class PopupService : IPopupService
 		ArgumentNullException.ThrowIfNull(navigation);
 
 		token.ThrowIfCancellationRequested();
-		var popupContent = GetPopupContent(serviceProvider.GetRequiredService<T>());
+		var popupContent = GetPopupContent<T>();
 		if(popupContent.BindingContext is IQueryAttributable queryAttributable && shellParameters is not null)
 		{
 			queryAttributable.ApplyQueryAttributes(shellParameters);
